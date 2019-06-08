@@ -12,6 +12,7 @@
         <module>ssm_dao</module>
         <module>ssm_service</module>
         <module>ssm_web</module>
+        <module>ssm_utils</module>
     </modules>
 
     <packaging>pom</packaging>
