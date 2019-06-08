@@ -5,6 +5,7 @@ import com.itheima.ssm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @author silent
@@ -14,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @RequestMapping("/findUser")
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @RequestMapping(value = "/findUser",method = RequestMethod.GET)
     public String findUserByName(String username) {
         System.out.println(username);
         User user = userService.findUserByName(username);
