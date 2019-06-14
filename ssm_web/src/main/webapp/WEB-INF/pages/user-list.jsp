@@ -144,7 +144,7 @@
 								</thead>
 								<tbody>
 
-									<c:forEach items="${userlist}" var="user">
+
 										<tr>
 											<td><input name="ids" type="checkbox"></td>
 											<td>${user.id }</td>
@@ -157,7 +157,6 @@
 												<a href="${pageContext.request.contextPath}/WEB-INF/pages/user-role-add.jsp-add.jsp" class="btn bg-olive btn-xs">添加角色</a>
 											</td>
 										</tr>
-									</c:forEach>
 								</tbody>
 								<!--
                             <tfoot>

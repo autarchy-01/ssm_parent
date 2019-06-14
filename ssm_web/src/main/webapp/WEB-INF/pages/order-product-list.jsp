@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<!-- 页面meta -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
 	<title>数据 - AdminLTE2定制版</title>
 	<meta name="description" content="AdminLTE2定制版">
 	<meta name="keywords" content="AdminLTE2定制版">
@@ -14,7 +17,6 @@
 	<meta
 			content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
 			name="viewport">
-
 
 	<link rel="stylesheet"
 		  href="${pageContext.request.contextPath}/plugins/bootstrap/css/bootstrap.min.css">
@@ -58,17 +60,16 @@
 		  href="${pageContext.request.contextPath}/plugins/ionslider/ion.rangeSlider.skinNice.css">
 	<link rel="stylesheet"
 		  href="${pageContext.request.contextPath}/plugins/bootstrap-slider/slider.css">
-	<link rel="stylesheet"
-		  href="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css">
 </head>
 
-<body class="hold-transition skin-purple sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini">
 
 <div class="wrapper">
 
 	<!-- 页面头部 -->
 	<jsp:include page="header.jsp"/>
 	<!-- 页面头部 /-->
+
 	<!-- 导航侧栏 -->
 	<jsp:include page="aside.jsp"/>
 	<!-- 导航侧栏 /-->
@@ -79,85 +80,216 @@
 		<!-- 内容头部 -->
 		<section class="content-header">
 			<h1>
-				产品管理 <small>产品表单</small>
+				订单管理 <small>全部订单</small>
 			</h1>
 			<ol class="breadcrumb">
 				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
 						class="fa fa-dashboard"></i> 首页</a></li>
-				<li><a href="${pageContext.request.contextPath}/product/findAllProduct">产品管理</a></li>
-				<li class="active">产品表单</li>
+				<li><a
+						href="${pageContext.request.contextPath}/pages/order-list.jsp">订单管理</a></li>
+				<li class="active">全部订单</li>
 			</ol>
 		</section>
 		<!-- 内容头部 /-->
 
-		<form action="${pageContext.request.contextPath}/product/saveProduct" method="post" >
-			<!-- 正文区域 -->
-			<section class="content"> <!--产品信息-->
+		<!-- 正文区域 -->
+		<section class="content"> <!-- .box-body -->
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<h3 class="box-title">列表</h3>
+				</div>
 
-				<div class="panel panel-default">
-					<div class="panel-heading">产品信息</div>
-					<div class="row data-type">
+				<div class="box-body">
 
-						<div class="col-md-2 title">产品编号</div>
-						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="productNum"
-								   placeholder="产品编号" value="">
-						</div>
-						<div class="col-md-2 title">产品名称</div>
-						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="productName"
-								   placeholder="产品名称" value="">
-						</div>
-						<div class="col-md-2 title">出发时间</div>
-						<div class="col-md-4 data">
-							<div class="input-group date">
-								<div class="input-group-addon">
-									<i class="fa fa-calendar"></i>
+					<!-- 数据表格 -->
+					<div class="table-box">
+
+						<!--工具栏-->
+						<div class="pull-left">
+							<div class="form-group form-inline">
+								<div class="btn-group">
+									<button type="button" class="btn btn-default" title="新建"
+											onclick='location.href="${pageContext.request.contextPath}/orders/add"'>
+										<i class="fa fa-file-o"></i> 新建
+									</button>
+									<button type="button" class="btn btn-default" title="删除"
+											onclick='confirm("你确认要删除吗？")'>
+										<i class="fa fa-trash-o"></i> 删除
+									</button>
+									<button type="button" class="btn btn-default" title="开启"
+											onclick='confirm("你确认要开启吗？")'>
+										<i class="fa fa-check"></i> 开启
+									</button>
+									<button type="button" class="btn btn-default" title="屏蔽"
+											onclick='confirm("你确认要屏蔽吗？")'>
+										<i class="fa fa-ban"></i> 屏蔽
+									</button>
+									<button type="button" class="btn btn-default" title="刷新"
+											onclick="window.location.reload();">
+										<i class="fa fa-refresh"></i> 刷新
+									</button>
 								</div>
-								<input type="text" class="form-control pull-right"
-									   id="datepicker-a3" name="departureTime">
 							</div>
 						</div>
-
-
-						<div class="col-md-2 title">出发城市</div>
-						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="cityName"
-								   placeholder="出发城市" value="">
+						<div class="box-tools pull-right">
+							<div class="has-feedback">
+								<input type="text" class="form-control input-sm"
+									   placeholder="搜索"> <span
+									class="glyphicon glyphicon-search form-control-feedback"></span>
+							</div>
 						</div>
+						<!--工具栏/-->
 
-						<div class="col-md-2 title">产品价格</div>
-						<div class="col-md-4 data">
-							<input type="text" class="form-control" placeholder="产品价格"
-								   name="productPrice" value="">
-						</div>
+						<!--数据列表-->
+						<table id="dataList"
+							   class="table table-bordered table-striped table-hover dataTable">
+							<thead>
+							<tr>
+								<th class="" style="padding-right: 0px;"><input
+										id="selall" type="checkbox" class="icheckbox_square-blue">
+								</th>
+								<th class="sorting_asc">ID</th>
 
-						<div class="col-md-2 title">产品状态</div>
-						<div class="col-md-4 data">
-							<select class="form-control select2" style="width: 100%"
-									name="productStatus">
-								<option value="0" selected="selected">关闭</option>
-								<option value="1">开启</option>
-							</select>
-						</div>
+								<th class="sorting">订单号</th>
+								<th class="sorting">产品名称</th>
+								<th class="sorting">产品出发日期</th>
+								<th class="sorting">订单申请日期</th>
+								<th class="sorting">订单状态</th>
+								<th class="sorting">支付方式</th>
 
-						<div class="col-md-2 title rowHeight2x">其他信息</div>
-						<div class="col-md-10 data rowHeight2x">
-							<textarea class="form-control" rows="3" placeholder="其他信息"
-									  name="productDesc"></textarea>
+								<th class="text-center">操作</th>
+							</tr>
+							</thead>
+							<tbody>
+							<c:if test="${product.ordersList.size()==0}">
+								对不起,没有找到订单!
+							</c:if>
+							<c:if test="${product.ordersList.size()!=0}">
+								<c:forEach items="${product.ordersList}" var="o">
+									<tr>
+										<td><input name="ids" type="checkbox"></td>
+										<td>${o.id}</td>
+
+										<td>${o.orderNum}</td>
+										<td>${product.productName}</td>
+										<td><fmt:formatDate value="${product.departureTime}" pattern="yyyy-MM-dd HH:mm"/></td>
+										<td>
+											<fmt:formatDate value="${o.orderTime}" pattern="yyyy-MM-dd HH:mm"/>
+										</td>
+										<td>
+											<c:if test="${o.orderStatus==0}">
+												未支付
+											</c:if>
+											<c:if test="${o.orderStatus==1}">
+												已支付
+											</c:if>
+										</td>
+										<td>
+											<c:if test="${o.payType==0}">
+												微信
+											</c:if>
+											<c:if test="${o.payType==1}">
+												支付宝
+											</c:if>
+											<c:if test="${o.payType!=0 && o.payType!=1}">
+												其他
+											</c:if>
+										</td>
+
+										<td class="text-center">
+											<button type="button" class="btn bg-olive btn-xs"
+													onclick='location.href="${pageContext.request.contextPath}/pages/order-show.jsp"'>订单</button>
+											<button type="button" class="btn bg-olive btn-xs"
+													onclick='location.href="${pageContext.request.contextPath}/pages/order-show.jsp"'>查看</button>
+										</td>
+									</tr>
+								</c:forEach>
+							</c:if>
+
+
+							</tbody>
+
+						</table>
+						<!--数据列表/-->
+
+						<!--工具栏-->
+						<div class="pull-left">
+							<div class="form-group form-inline">
+								<div class="btn-group">
+									<button type="button" class="btn btn-default" title="新建"
+											onclick='location.href="all-order-manage-edit.html"'>
+										<i class="fa fa-file-o"></i> 新建
+									</button>
+									<button type="button" class="btn btn-default" title="删除"
+											onclick='confirm("你确认要删除吗？")'>
+										<i class="fa fa-trash-o"></i> 删除
+									</button>
+									<button type="button" class="btn btn-default" title="开启"
+											onclick='confirm("你确认要开启吗？")'>
+										<i class="fa fa-check"></i> 开启
+									</button>
+									<button type="button" class="btn btn-default" title="屏蔽"
+											onclick='confirm("你确认要屏蔽吗？")'>
+										<i class="fa fa-ban"></i> 屏蔽
+									</button>
+									<button type="button" class="btn btn-default" title="刷新"
+											onclick="window.location.reload();">
+										<i class="fa fa-refresh"></i> 刷新
+									</button>
+								</div>
+							</div>
 						</div>
+						<div class="box-tools pull-right">
+							<div class="has-feedback">
+								<input type="text" class="form-control input-sm"
+									   placeholder="搜索"> <span
+									class="glyphicon glyphicon-search form-control-feedback"></span>
+							</div>
+						</div>
+						<!--工具栏/-->
 
 					</div>
+					<!-- 数据表格 /-->
+
 				</div>
-				<!--订单信息/--> <!--工具栏-->
-				<div class="box-tools text-center">
-					<button type="submit" class="btn bg-maroon">保存</button>
-					<button type="button" class="btn bg-default"
-							onclick="history.back(-1);">返回</button>
+				<!-- /.box-body -->
+
+				<!-- .box-footer-->
+				<div class="box-footer">
+					<div class="pull-left">
+						<div class="form-group form-inline">
+							总共2 页，共14 条数据。 每页 <select class="form-control">
+							<option>10</option>
+							<option>15</option>
+							<option>20</option>
+							<option>50</option>
+							<option>80</option>
+						</select> 条
+						</div>
+					</div>
+
+					<div class="box-tools pull-right">
+						<ul class="pagination">
+							<li><a href="#" aria-label="Previous">首页</a></li>
+							<li><a href="#">上一页</a></li>
+							<li><a href="#">1</a></li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">5</a></li>
+							<li><a href="#">下一页</a></li>
+							<li><a href="#" aria-label="Next">尾页</a></li>
+						</ul>
+					</div>
+
 				</div>
-				<!--工具栏/--> </section>
-			<!-- 正文区域 /-->
-		</form>
+				<!-- /.box-footer-->
+
+			</div>
+
+		</section>
+		<!-- 正文区域 /-->
+
 	</div>
 	<!-- 内容区域 /-->
 
@@ -172,7 +304,6 @@
 	<!-- 底部导航 /-->
 
 </div>
-
 
 <script
 		src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
@@ -257,9 +388,6 @@
 		src="${pageContext.request.contextPath}/plugins/ionslider/ion.rangeSlider.min.js"></script>
 <script
 		src="${pageContext.request.contextPath}/plugins/bootstrap-slider/bootstrap-slider.js"></script>
-<script
-		src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-
 <script>
 	$(document).ready(function() {
 		// 选择框
@@ -281,26 +409,27 @@
 	}
 
 	$(document).ready(function() {
-		$('#datepicker-a3').datetimepicker({
-			format: "yyyy-mm-dd hh:ii",
-			autoclose: true,
-			todayBtn: true,
-			language: "zh-CN"
-		});
-	});
 
-	$(document).ready(function() {
 		// 激活导航位置
 		setSidebarActive("order-manage");
-		$("#datepicker-a3").datetimepicker({
-			format:"yyyy-mm-dd hh:ii",
 
+		// 列表按钮
+		$("#dataList td input[type='checkbox']").iCheck({
+			checkboxClass : 'icheckbox_square-blue',
+			increaseArea : '20%'
 		});
-
+		// 全选操作
+		$("#selall").click(function() {
+			var clicks = $(this).is(':checked');
+			if (!clicks) {
+				$("#dataList td input[type='checkbox']").iCheck("uncheck");
+			} else {
+				$("#dataList td input[type='checkbox']").iCheck("check");
+			}
+			$(this).data("clicks", !clicks);
+		});
 	});
 </script>
-
-
 </body>
 
 </html>

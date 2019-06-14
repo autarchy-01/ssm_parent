@@ -20,9 +20,33 @@
 
     <bean id="SqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
+        <!--配置分页插件-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <props>
+                            <prop key="helperDialect">mysql</prop>
+                            <prop key="reasonable">true</prop>
+                        </props>
+                    </property>
+                </bean>
+            </array>
+        </property>
+        <property name="configuration">
+            <bean class="org.apache.ibatis.session.Configuration">
+                <!--开启二级缓存-->
+                <property name="cacheEnabled" value="true"/>
+                <!--开启延迟加载-->
+                <property name="lazyLoadingEnabled" value="true"/>
+                <property name="aggressiveLazyLoading" value="false"/>
+            </bean>
+        </property>
+
     </bean>
 
     <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.itheima.ssm.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="SqlSessionFactory"/>
     </bean>
 </beans>

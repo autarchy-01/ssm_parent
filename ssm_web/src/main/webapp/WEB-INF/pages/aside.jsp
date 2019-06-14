@@ -58,11 +58,11 @@
 				<ul class="treeview-menu">
 
 					<li id="system-setting"><a
-						href="${pageContext.request.contextPath}/pages/product-list">
+						href="${pageContext.request.contextPath}/product/findAllProduct">
 							<i class="fa fa-circle-o"></i> 产品管理
 					</a></li>
 					<li id="system-setting"><a
-						href="${pageContext.request.contextPath}/pages/order-list">
+						href="${pageContext.request.contextPath}/orders/findAllOrders">
 							<i class="fa fa-circle-o"></i> 订单管理
 					</a></li>
 
